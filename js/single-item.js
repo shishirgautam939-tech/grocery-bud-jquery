@@ -14,12 +14,10 @@ function createSingleItem(item) {
     </button>
   `);
 
-  // ✅ Checkbox toggle
   $div.find('input[type="checkbox"]').on("change", function () {
     editCompleted(item.id);
   });
 
-  // ✅ Delete button
   $div.find(".remove-btn").on("click", function () {
     removeItem(item.id);
   });
