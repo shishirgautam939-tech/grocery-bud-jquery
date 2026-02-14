@@ -1,4 +1,6 @@
 var items = groceryItems;
+var editId = null;
+
 
 function editCompleted(itemId) {
   items = $.map(items, function (item) {
@@ -27,6 +29,7 @@ function generateId() {
   return Date.now().toString(36) + Math.random().toString(36).substr(2);
 }
 
+
 function addItem(itemName) {
   var newItem = {
     name: itemName,
@@ -42,11 +45,42 @@ function addItem(itemName) {
   }, 0);
 }
 
+function updateItemName(newName) {
+  items = $.map(items, function (item) {
+    if (item.id === editId) {
+      return $.extend({}, item, { name: newName });
+    }
+    return item;
+  });
+
+  editId = null;
+  render();
+
+  setTimeout(function () {
+    alert("Item Updated Successfully!");
+  }, 0);
+}
+
+function setEditId(itemId) {
+  editId = itemId;
+  render();
+
+  setTimeout(function () {
+    $(".form-input").focus();
+  }, 0);
+}
+
 function render() {
   var $app = $("#app");
   $app.empty();
 
-  var $formElement = createForm();
+  var itemToEdit = editId
+    ? $.grep(items, function (item) {
+        return item.id === editId;
+      })[0]
+    : null;
+
+  var $formElement = createForm(editId, itemToEdit);
   var $itemsElement = createItems(items);
 
   $app.append($formElement);
